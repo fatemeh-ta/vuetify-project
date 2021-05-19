@@ -2,7 +2,7 @@
       <v-container class="grey lighten-5">
         <v-row no-gutters>
           <v-col
-            cols="12"
+            lg="12"
             md="8"
           >
             <div class="text-center">

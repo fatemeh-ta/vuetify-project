@@ -2,14 +2,15 @@
   <v-container class="grey lighten-5">
     <v-row no-gutters>
       <v-col
-        cols="12"
+        md="8" 
+        lg="12"
       >
         <v-card>
           <v-container fluid>
             <v-row
               align="center"
             >
-              <v-col md="12">
+              <v-col md="8" lg="12">
                 <v-form
                   ref="form"
                   lazy-validation
