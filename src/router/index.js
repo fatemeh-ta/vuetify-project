@@ -1,15 +1,23 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Login from '../components/login'
 import Register from '../components/register'
+import Login from '../components/login'
+import DetailCard from '../components/detailCard'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/login',
-    name: 'Login',
-    component: Login
+    path: '/',
+    name: '',
+    component: Login,
+    children: [
+      {
+        path: 'dashboard',
+        name: 'DetailCard',
+        component: DetailCard
+      },
+    ]
   },
   {
     path: '/register',

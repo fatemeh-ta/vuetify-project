@@ -2,61 +2,55 @@
   <v-container class="grey lighten-5">
     <v-row no-gutters>
       <v-col
-        v-for="n in 1"
-        :key="n"
-        cols="12"
-        sm="6"
+        lg="12"
+        md="8"
       >
         <v-form
           ref="form"
+          v-model="valid"
           lazy-validation
         >
           <v-text-field
-            v-model="user.firstName"
+            v-model="name"
+            :rules="nameRules"
             label="نام"
             required
           ></v-text-field>
 
-          {{ errorFirstname }}
-
           <v-text-field
-            v-model="user.lastName"
+            v-model="lastname"
+            :rules="lastnameRules"
             label="نام خانوادگی"
             required
           ></v-text-field>
-
-          {{ errorLastname }}
-
+          
           <v-text-field
-            v-model="user.nationalCode"
+            v-model="nationalcode"
+            :rules="codeRules"
             label="کد ملی"
             required
           ></v-text-field>
-
-          {{ errorNationalCode }}
-
-          <div class="text-center">
-            <v-btn
-              color="success"
-              class="mr-4"
-              @click.prevent="validate"
-            >
-              عضویت
-            </v-btn>
-            <v-btn
-              color="error"
-              class="mr-4"
-              @click.prevent="reset"
-            >
-             پاک کردن
-            </v-btn>
-          </div>
+          <v-btn
+            :disabled="!valid"
+            color="success"
+            class="mr-4"
+            @click="validate"
+          >
+            عضویت
+          </v-btn>
+          <v-btn
+            color="error"
+            class="mr-4"
+            @click="reset"
+          >
+            پاک کردن
+          </v-btn>
         </v-form>
         <div class="text-left border-top">
           <v-btn
             color="green"
             @click.prevent="register()"
-            to="Login"
+            to="/"
           >
            ورود
           </v-btn>
@@ -68,89 +62,46 @@
 
 <script>
 export default {
-  data() {
-    return {
-      user : {
-        firstName : "",
-        lastName : "",
-        nationalCode : ""
-      },
-      // errorFirstname : "",
-      // errorLastname : "",
-      // errorNationalCode : ""
-    }
-  },
-  methods: {
-    validate() {
-    //   // FIRST NAME
-    //   if (this.user.firstName.match("[a-z]{1,10}") && this.user.firstName.length > 2) {
-    //     this.errorFirstname = "";
-    //   } else {
-    //     this.errorFirstname = "لطفا نام صحیح درج نمایید (حداقل سه کاراکتر باشد)";
-    //   }
-    //   // LAST NAME
-    //   if (this.user.lastName.match("[a-z]{1,10}") && this.user.lastName.length > 2) {
-    //     this.errorLastname = "";
-    //   } else {
-    //     this.errorLastname = "لطفا نام خانوادگی صحیح درج نمایید(حداقل سه کاراکتر باشد)";
-    //   }
-    //   //NATIONAL CODE
-    //   let code = this.user.nationalCode;
-    //   if (!/^\d{10}$/.test(code) || code === "")
-    //     this.errorNationalCode = "لطفا کد ملی صحیح را وارد نمایید";
-    //     const check = +code[9];
-    //     const sum = Array(9).fill().map((_, i) => +code[i] * (10 - i)).reduce((x, y) => x + y) % 11;
-    //   if ((sum < 2 && check == sum) || (sum >= 2 && check + sum == 11)) {
-    //     this.errorNationalCode = ""
-    //   }
+  data: () => ({
+    valid: true,
+    name: '',
+    lastname: '',
+    nationalcode: '',
+    nameRules: [
+      v => !!v || 'پر کردن نام الزامی است',
+      v => (!!v && v.length >= 3 ) || 'نام حداقل سه کاراکتر باشد',
+      v => (!!v && /[a-zA-Z]+(?:[a-zA-Z]+)*/.test(v))  || 'نام کاربری معتبر نمی باشد',
+    ],
+    lastnameRules: [
+      v => !!v || 'پر کردن نام خانوادگی الزامی است',
+      v =>  (!!v && /[a-zA-Z]+(?:[a-zA-Z]+)*/.test(v) || 'نام خانوادگی معتبر نمی باشد'),
+
+    ],
+    codeRules: [
+      v => !!v || 'پر کردن کدملی الزامی است',
+      v => (!!v && v.length < 9 ) || 'کد ملی باید ۱۰ رقم باشد',
       
-      if (this.errorNationalCode === "" && this.errorLastname === "" && this.errorFirstname === "") {
-        alert ("ثبت نام شما با موفقیت ثبت شد");
-        this.user.firstName = "";
-        this.user.lastName = "";
-        this.user.nationalCode = ""
+    ],
+    
+  }),
+  methods: {
+    validate () {
+      this.$refs.form.validate();
+      if (this.$refs.form.validate()) {
+        alert("عضویت با موفقیت انجام شد")
+        this.nationalcode = "";
+        this.name = "";
+        this.lastname = "";
       }
     },
-    reset() {
-      this.user.firstName = "";
-      this.user.lastName = "";
-      this.user.nationalCode = ""
-    }
+    reset () {
+      this.$refs.form.reset()
+    },
   },
-  computed : {
-    errorFirstname() {
-      if (this.user.firstName.match("[a-z]{1,10}") && this.user.firstName.length > 2) {
-        return("")
-      } else {
-        return "لطفا نام صحیح درج نمایید (حداقل سه کاراکتر و ترکیب حروف و عدد باشد)"
-      }
-    },
-    errorLastname() {
-      if (this.user.lastName.match("[a-z]{1,10}") && this.user.lastName.length > 2) {
-        return("")
-      } else {
-        return "لطفا نام صحیح درج نمایید (حداقل سه کاراکتر و ترکیب حروف و عدد باشد)"
-      }
-    },
-    errorNationalCode() {
-      const check = +this.user.nationalCode[9];
-      const sum = Array(9).fill().map((_, i) => +this.user.nationalCode[i] * (10 - i)).reduce((x, y) => x + y) % 11;
-      if (this.user.nationalCode === "" || this.user.nationalCode.length <= 9 || this.user.nationalCode.length >= 11) {
-        return("لطفا کد ملی صحیح را وارد نمایید")
-      } else if((sum < 2 && check == sum) || (sum >= 2 && check + sum == 11)){
-        return("")
-      } else {
-        return("لطفا کد ملی صحیح را وارد نمایید")
-      }
-    }
-  }
 }
 </script>
 
 <style lang="scss">
-.v-label {
-  left: unset !important;
-}
 
 
 </style>

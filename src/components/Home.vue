@@ -1,14 +1,35 @@
 <template>
-  <v-app>
-    <v-main>
       <v-container class="grey lighten-5">
         <v-row no-gutters>
-          
+          <v-col
+            cols="12"
+            md="8"
+          >
+            <div class="text-center">
+              <v-btn
+                class="ma-2"
+                color="secondary"
+                to="Login"
+              >
+                ورود
+              </v-btn>
+              <v-btn
+                class="ma-2"
+                color="info"
+                to="Register"
+              >
+                ثبت نام
+                <template v-slot:loader>
+                  <span class="custom-loader">
+                    <v-icon light>mdi-cached</v-icon>
+                  </span>
+                </template>
+              </v-btn>
+            </div>
+            <span class="material-icons">face</span>
+          </v-col>
         </v-row>
       </v-container>
-      <router-view></router-view>
-    </v-main>
-  </v-app>
 </template>
 
 <script>
